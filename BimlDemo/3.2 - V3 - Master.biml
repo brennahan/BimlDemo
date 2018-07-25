@@ -1,0 +1,21 @@
+<!-- <#@ template language="C#" tier="1" #> -->
+<#@ assembly name="%EnvVar_BimlScriptLibrary%" #>
+<#@ import namespace="BimlScriptLibrary" #>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Packages>
+        <Package Name="V3 - Master" AutoCreateConfigurationsType="None" ProtectionLevel="DontSaveSensitive" ConstraintMode="Parallel">
+            <Tasks>
+                <Container ConstraintMode="Parallel" Name="CTN - Load - Sales Tables">
+                    <Tasks>
+                    <# foreach(LoadTables.DestinationLoadInfo loadInfo in LoadTables.GetDestinationLoadInfo()) { #>
+                        <ExecutePackage Name="Run V3 - Load - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>">
+                            <ExternalProjectPackage Package="V3 - Load - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>.dtsx"/>
+                        </ExecutePackage>
+                    <# } #>
+                    </Tasks>
+                </Container>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>

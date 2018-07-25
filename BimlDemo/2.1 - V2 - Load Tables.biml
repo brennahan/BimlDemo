@@ -1,0 +1,81 @@
+<!-- <#@ template language="C#" tier="0" #> -->
+<#@ import namespace="System.Collections.Generic" #>
+
+<#+
+    public class DestinationLoadInfo
+    {
+        public string SrcQuery { get; set; }
+        public string DestSchema { get; set; }
+        public string DestTable { get; set; }
+        public bool TruncateBeforeLoad { get; set; }
+    }
+    
+    public static List<DestinationLoadInfo> GetDestinationLoadInfo(){
+        List<DestinationLoadInfo> loadInfoList = new List<DestinationLoadInfo>();
+        
+        loadInfoList.Add(new DestinationLoadInfo()
+        {
+            SrcQuery = "SELECT [InvoiceLineID], [InvoiceID], [StockItemID], [Description], [PackageTypeID], [Quantity], [UnitPrice], [TaxRate], [TaxAmount], [LineProfit], [ExtendedPrice], [LastEditedBy], [LastEditedWhen] FROM [Sales].[InvoiceLines]",
+            DestSchema = "demo",
+            DestTable = "InvoiceLines",
+            TruncateBeforeLoad = true
+        });
+        
+        loadInfoList.Add(new DestinationLoadInfo()
+        {
+            SrcQuery = "SELECT [InvoiceID], [CustomerID], [BillToCustomerID], [OrderID], [DeliveryMethodID], [ContactPersonID], [AccountsPersonID], [SalespersonPersonID], [PackedByPersonID], [InvoiceDate], [CustomerPurchaseOrderNumber], [IsCreditNote], [CreditNoteReason], [Comments], [DeliveryInstructions], [InternalComments], [TotalDryItems], [TotalChillerItems], [DeliveryRun], [RunPosition], [ReturnedDeliveryData], [ConfirmedDeliveryTime], [ConfirmedReceivedBy], [LastEditedBy], [LastEditedWhen] FROM [Sales].[Invoices]",
+            DestSchema = "demo",
+            DestTable = "Invoices",
+            TruncateBeforeLoad = true
+        });
+        
+        loadInfoList.Add(new DestinationLoadInfo()
+        {
+            SrcQuery = "SELECT [OrderLineID], [OrderID], [StockItemID], [Description], [PackageTypeID], [Quantity], [UnitPrice], [TaxRate], [PickedQuantity], [PickingCompletedWhen], [LastEditedBy], [LastEditedWhen] FROM [Sales].[OrderLines]",
+            DestSchema = "demo",
+            DestTable = "OrderLines",
+            TruncateBeforeLoad = true
+        });
+        
+        loadInfoList.Add(new DestinationLoadInfo()
+        {
+            SrcQuery = "SELECT [OrderID], [CustomerID], [SalespersonPersonID], [PickedByPersonID], [ContactPersonID], [BackorderOrderID], [OrderDate], [ExpectedDeliveryDate], [CustomerPurchaseOrderNumber], [IsUndersupplyBackordered], [Comments], [DeliveryInstructions], [InternalComments], [PickingCompletedWhen], [LastEditedBy], [LastEditedWhen] FROM [Sales].[Orders]",
+            DestSchema = "demo",
+            DestTable = "Orders",
+            TruncateBeforeLoad = true
+        });
+        
+        return loadInfoList;
+    }
+    
+#>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Connections>
+        <OleDbConnection Name="Source" CreateInProject="false" ConnectionString="Data Source=BHJ-AZUREDEV\BHJSQLSERVER2016;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+        <OleDbConnection Name="Destination" CreateInProject="false" ConnectionString="Data Source=BHJ-AZUREDEV\BHJSQLSERVER2016;Initial Catalog=DestinationDB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+    </Connections>
+    <Packages>
+    <# foreach(DestinationLoadInfo loadInfo in GetDestinationLoadInfo()) { #>
+        <Package Name="V2 - Load - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>" ProtectionLevel="DontSaveSensitive" ConstraintMode="Linear">
+            <Tasks>
+            <# if (loadInfo.TruncateBeforeLoad) { #>
+                <ExecuteSQL ConnectionName="Destination" Name="SQL - Truncate Table - <#=loadInfo.DestTable#>">
+                    <DirectInput>TRUNCATE TABLE <#=loadInfo.DestSchema#>.<#=loadInfo.DestTable#></DirectInput>
+                </ExecuteSQL>
+            <# } #>
+                <Dataflow DelayValidation="true" Name="DFT - Copy Data to DestinationDB - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>">
+                    <Transformations>
+                        <OleDbSource ConnectionName="Source" Name="OLE_SRC - Sales - <#=loadInfo.DestTable#>">
+                            <DirectInput><#=loadInfo.SrcQuery#></DirectInput>
+                        </OleDbSource>
+                        <OleDbDestination ConnectionName="Destination" Name="OLE_DST - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>">
+                            <ExternalTableOutput Table="[<#=loadInfo.DestSchema#>].[<#=loadInfo.DestTable#>]" />
+                        </OleDbDestination>
+                    </Transformations>
+                </Dataflow>
+            </Tasks>
+        </Package>
+    <# } #>
+    </Packages>    
+</Biml>

@@ -1,0 +1,77 @@
+<!-- <#@ template language="C#" tier="0" #> -->
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Connections>
+        <OleDbConnection Name="Source" CreateInProject="false" ConnectionString="Data Source=BRENNANJ-PC\BRENNANJSQL;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+        <OleDbConnection Name="Destination" CreateInProject="false" ConnectionString="Data Source=BRENNANJ-PC\BRENNANJSQL;Initial Catalog=DestinationDB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+    </Connections>
+    <Packages>
+        <Package Name="V1 - Load - demo_InvoiceLines" ProtectionLevel="DontSaveSensitive" ConstraintMode="Linear">
+            <Tasks>
+                <ExecuteSQL ConnectionName="Destination" Name="SQL - Truncate Table - InvoiceLines">
+                    <DirectInput>TRUNCATE TABLE demo.InvoiceLines</DirectInput>
+                </ExecuteSQL>
+                <Dataflow DelayValidation="true" Name="DFT - Copy Data to DestinationDB - demo_InvoiceLines">
+                    <Transformations>
+                        <OleDbSource ConnectionName="Source" Name="OLE_SRC - Sales_InvoiceLines">
+                            <DirectInput>SELECT [InvoiceLineID], [InvoiceID], [StockItemID], [Description], [PackageTypeID], [Quantity], [UnitPrice], [TaxRate], [TaxAmount], [LineProfit], [ExtendedPrice], [LastEditedBy], [LastEditedWhen] FROM [Sales].[InvoiceLines]</DirectInput>
+                        </OleDbSource>
+                        <OleDbDestination ConnectionName="Destination" Name="OLE_DST - demo_InvoiceLines">
+                            <ExternalTableOutput Table="[demo].[InvoiceLines]" />
+                        </OleDbDestination>
+                    </Transformations>
+                </Dataflow>
+            </Tasks>
+        </Package>
+        <Package Name="V1 - Load - demo_Invoices" ProtectionLevel="DontSaveSensitive" ConstraintMode="Linear">
+            <Tasks>
+                <ExecuteSQL ConnectionName="Destination" Name="SQL - Truncate Table - Invoices">
+                    <DirectInput>TRUNCATE TABLE demo.Invoices</DirectInput>
+                </ExecuteSQL>
+                <Dataflow DelayValidation="true" Name="DFT - Copy Data to DestinationDB - demo_Invoices">
+                    <Transformations>
+                        <OleDbSource ConnectionName="Source" Name="OLE_SRC - Sales_Invoices">
+                            <DirectInput>SELECT [InvoiceID], [CustomerID], [BillToCustomerID], [OrderID], [DeliveryMethodID], [ContactPersonID], [AccountsPersonID], [SalespersonPersonID], [PackedByPersonID], [InvoiceDate], [CustomerPurchaseOrderNumber], [IsCreditNote], [CreditNoteReason], [Comments], [DeliveryInstructions], [InternalComments], [TotalDryItems], [TotalChillerItems], [DeliveryRun], [RunPosition], [ReturnedDeliveryData], [ConfirmedDeliveryTime], [ConfirmedReceivedBy], [LastEditedBy], [LastEditedWhen] FROM [Sales].[Invoices]</DirectInput>
+                        </OleDbSource>
+                        <OleDbDestination ConnectionName="Destination" Name="OLE_DST - demo_Invoices">
+                            <ExternalTableOutput Table="[demo].[Invoices]" />
+                        </OleDbDestination>
+                    </Transformations>
+                </Dataflow>
+            </Tasks>
+        </Package>
+        <Package Name="V1 - Load - demo_OrderLines" ProtectionLevel="DontSaveSensitive" ConstraintMode="Linear">
+            <Tasks>
+                <ExecuteSQL ConnectionName="Destination" Name="SQL - Truncate Table - OrderLines">
+                    <DirectInput>TRUNCATE TABLE demo.OrderLines</DirectInput>
+                </ExecuteSQL>
+                <Dataflow DelayValidation="true" Name="DFT - Copy Data to DestinationDB - demo_OrderLines">
+                    <Transformations>
+                        <OleDbSource ConnectionName="Source" Name="OLE_SRC - Sales_OrderLines">
+                            <DirectInput>SELECT [OrderLineID], [OrderID], [StockItemID], [Description], [PackageTypeID], [Quantity], [UnitPrice], [TaxRate], [PickedQuantity], [PickingCompletedWhen], [LastEditedBy], [LastEditedWhen] FROM [Sales].[OrderLines]</DirectInput>
+                        </OleDbSource>
+                        <OleDbDestination ConnectionName="Destination" Name="OLE_DST - demo_OrderLines">
+                            <ExternalTableOutput Table="[demo].[OrderLines]" />
+                        </OleDbDestination>
+                    </Transformations>
+                </Dataflow>
+            </Tasks>
+        </Package>
+        <Package Name="V1 - Load - demo_Orders" ProtectionLevel="DontSaveSensitive" ConstraintMode="Linear">
+            <Tasks>
+                <ExecuteSQL ConnectionName="Destination" Name="SQL - Truncate Table - Orders">
+                    <DirectInput>TRUNCATE TABLE demo.Orders</DirectInput>
+                </ExecuteSQL>
+                <Dataflow DelayValidation="true" Name="DFT - Copy Data to DestinationDB - demo_Orders">
+                    <Transformations>
+                        <OleDbSource ConnectionName="Source" Name="OLE_SRC - Sales_Orders">
+                            <DirectInput>SELECT [OrderID], [CustomerID], [SalespersonPersonID], [PickedByPersonID], [ContactPersonID], [BackorderOrderID], [OrderDate], [ExpectedDeliveryDate], [CustomerPurchaseOrderNumber], [IsUndersupplyBackordered], [Comments], [DeliveryInstructions], [InternalComments], [PickingCompletedWhen], [LastEditedBy], [LastEditedWhen] FROM [Sales].[Orders]</DirectInput>
+                        </OleDbSource>
+                        <OleDbDestination ConnectionName="Destination" Name="OLE_DST - demo_Orders">
+                            <ExternalTableOutput Table="[demo].[Orders]" />
+                        </OleDbDestination>
+                    </Transformations>
+                </Dataflow>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>

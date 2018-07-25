@@ -1,0 +1,33 @@
+<!-- <#@ template language="C#" tier="0" #> -->
+<#@ assembly name="%EnvVar_BimlScriptLibrary%" #>
+<#@ import namespace="BimlScriptLibrary" #>
+
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Connections>
+        <OleDbConnection Name="Source" CreateInProject="false" ConnectionString="Data Source=BHJ-AZUREDEV\BHJSQLSERVER2016;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+        <OleDbConnection Name="Destination" CreateInProject="false" ConnectionString="Data Source=BHJ-AZUREDEV\BHJSQLSERVER2016;Initial Catalog=DestinationDB;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+    </Connections>
+    <Packages>
+    <# foreach(LoadTables.DestinationLoadInfo loadInfo in LoadTables.GetDestinationLoadInfo()) { #>
+        <Package Name="V3 - Load - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>" ProtectionLevel="DontSaveSensitive" ConstraintMode="Linear">
+            <Tasks>
+            <# if (loadInfo.TruncateBeforeLoad) { #>
+                <ExecuteSQL ConnectionName="Destination" Name="SQL - Truncate Table - <#=loadInfo.DestTable#>">
+                    <DirectInput>TRUNCATE TABLE <#=loadInfo.DestSchema#>.<#=loadInfo.DestTable#></DirectInput>
+                </ExecuteSQL>
+            <# } #>
+                <Dataflow DelayValidation="true" Name="DFT - Copy Data to DestinationDB - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>">
+                    <Transformations>
+                        <OleDbSource ConnectionName="Source" Name="OLE_SRC - Sales - <#=loadInfo.DestTable#>">
+                            <DirectInput><#=loadInfo.SrcQuery#></DirectInput>
+                        </OleDbSource>
+                        <OleDbDestination ConnectionName="Destination" Name="OLE_DST - <#=loadInfo.DestSchema#>_<#=loadInfo.DestTable#>">
+                            <ExternalTableOutput Table="[<#=loadInfo.DestSchema#>].[<#=loadInfo.DestTable#>]" />
+                        </OleDbDestination>
+                    </Transformations>
+                </Dataflow>
+            </Tasks>
+        </Package>
+    <# } #>
+    </Packages>    
+</Biml>

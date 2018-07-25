@@ -1,0 +1,25 @@
+<!-- <#@ template language="C#" tier="1" #> -->
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <Packages>
+        <Package Name="V1 - Master" AutoCreateConfigurationsType="None" ProtectionLevel="DontSaveSensitive" ConstraintMode="Parallel">
+            <Tasks>
+                <Container ConstraintMode="Parallel" Name="CTN - Load - Sales Tables">
+                    <Tasks>
+                        <ExecutePackage Name="Run V1 - Load - demo_InvoiceLines">
+                            <ExternalProjectPackage Package="V1 - Load - demo_InvoiceLines.dtsx"/>
+                        </ExecutePackage>
+                        <ExecutePackage Name="Run V1 - Load - demo_Invoices">
+                            <ExternalProjectPackage Package="V1 - Load - demo_Invoices.dtsx"/>
+                        </ExecutePackage>
+                        <ExecutePackage Name="Run V1 - Load - demo_OrderLines">
+                            <ExternalProjectPackage Package="V1 - Load - demo_OrderLines.dtsx"/>
+                        </ExecutePackage>
+                        <ExecutePackage Name="Run V1 - Load - demo_Orders">
+                            <ExternalProjectPackage Package="V1 - Load - demo_Orders.dtsx"/>
+                        </ExecutePackage>
+                    </Tasks>
+                </Container>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>
