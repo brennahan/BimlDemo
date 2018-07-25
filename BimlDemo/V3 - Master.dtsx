@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="07/25/2018 14:20:16" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="BRENNANJ-PC" DTS:CreatorName="brennanj" DTS:DTSID="{101AE0DA-1713-4259-AFAF-DD4665AB4C14}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1033" DTS:ObjectName="V3 - Master" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{4BEED803-5E7C-43E5-815B-7A162D999B05}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{1E5DFB58-2E7D-42DD-922D-E453769BE61C}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="CTN - Load - Sales Tables" DTS:refId="Package\CTN - Load - Sales Tables">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{A13DBAE5-7D03-4CB5-BD2F-3D944A896C5C}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="Run V3 - Load - demo_InvoiceLines" DTS:refId="Package\CTN - Load - Sales Tables\Run V3 - Load - demo_InvoiceLines" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>V3 - Load - demo_InvoiceLines.dtsx</PackageName>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{FE80F8C8-BD67-44CD-86B9-A6B9F9BD4F2E}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="Run V3 - Load - demo_Invoices" DTS:refId="Package\CTN - Load - Sales Tables\Run V3 - Load - demo_Invoices" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>V3 - Load - demo_Invoices.dtsx</PackageName>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{4A14669D-7C4C-456E-9F96-95D6088C765E}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="Run V3 - Load - demo_OrderLines" DTS:refId="Package\CTN - Load - Sales Tables\Run V3 - Load - demo_OrderLines" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>V3 - Load - demo_OrderLines.dtsx</PackageName>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecutePackageTask" DTS:DTSID="{87D3F161-0E38-4BA6-AD7C-16632838A318}" DTS:ExecutableType="Microsoft.ExecutePackageTask" DTS:LocaleID="-1" DTS:ObjectName="Run V3 - Load - demo_Orders" DTS:refId="Package\CTN - Load - Sales Tables\Run V3 - Load - demo_Orders" DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <PackageName>V3 - Load - demo_Orders.dtsx</PackageName>
+              <UseProjectReference>True</UseProjectReference>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>
